@@ -5,7 +5,8 @@
   共陽:  5V  LOW  HIGH
   共陰: GND  HIGH LOW
 */
-
+int BTN_PIN = 12;
+int BTN_STATE = 1;
 int DOT_PIN = 2;
 int NUMBERS[10][7] = {
     {1, 1, 1, 1, 1, 1, 0},
@@ -43,13 +44,25 @@ void setup()
     delay(500);
   }
   clear();
+  delay(1000);
+  showNum(0);
+  pinMode(BTN_PIN, INPUT_PULLUP);
 }
 
 int CNT = 0;
 void loop()
 {
-  if (CNT == 10)
-    CNT = 0;
-  showNum(CNT++);
-  delay(3000);
+  if (BTN_STATE == digitalRead(BTN_PIN))
+    return;
+
+  delay(50);
+  BTN_STATE = digitalRead(BTN_PIN);
+
+  // On button click
+  if (!BTN_STATE)
+  {
+    if (++CNT == 10)
+      CNT = 0;
+    showNum(CNT);
+  }
 }
